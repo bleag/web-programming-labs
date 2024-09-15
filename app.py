@@ -1,4 +1,4 @@
-from flask import Flask, url_for, redirect,Response
+from flask import Flask, url_for, redirect,Response , render_template
 app = Flask(__name__)
 
 
@@ -102,7 +102,7 @@ def created():
 
 @app.errorhandler(404)
 def not_found(err):
-    return "нет такой страницы", 404
+    return  render_template ("404.html"), 404
 
 @app.route("/lab1/web1")
 def web1():
