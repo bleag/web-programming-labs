@@ -2,7 +2,7 @@ from flask import Flask, url_for, redirect
 app = Flask(__name__)
 
 
-@app.route("/web")
+@app.route("/lab1/web")
 def web():
     return """<!doctype html> 
         <html> 
@@ -14,7 +14,7 @@ def web():
 
 
 
-@app.route("/author")
+@app.route("/lab1/author")
 def author():
     name = "Орлов Андрей Викторович"
     group = "ФБИ-21"
@@ -74,7 +74,7 @@ def reset_counter():
         </body>
     </html>'''
 
-@app.route("/info")
+@app.route("/lab1/info")
 def info():
     return redirect("/author")
 
@@ -94,7 +94,7 @@ def created():
 def not_found(err):
     return "нет такой страницы", 404
 
-@app.route("/web1")
+@app.route("/lab1/web1")
 def web1():
      return """<!doctype html>
         <html>
