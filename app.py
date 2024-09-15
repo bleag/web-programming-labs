@@ -1,7 +1,6 @@
 from flask import Flask, url_for, redirect
 app = Flask(__name__)
 
-
 @app.route("/lab1/web")
 def web():
     return """<!doctype html> 
@@ -105,3 +104,33 @@ def web1():
             'X-Server': 'sample',
             'Content-Type': 'text/plain; charset=utf-8'
         }
+
+@app.route("/lab1/menu")
+def menu():
+    css_path = url_for("static", filename="lab1.css")
+    return '''
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>НГТУ, ФБ, Лабораторные работы</title>
+        <link rel="stylesheet" type="text/css" href="''' + css_path + '''">       
+    </head>
+    <body>
+        <header>
+            НГТУ, ФБ, WEB-программирование, часть 2. Список лабораторных
+        </header>
+        <h2><a href="/lab1">Первая лабораторная</a></h2>
+        <h2><a href="/lab2">Вторая лабораторная</a></h2>
+        <h2><a href="/lab3">Третья лабораторная</a></h2>
+        <h2><a href="/lab4">Четвёртая лабораторная</a></h2>
+        <h2><a href="/lab5">Пятая лабораторная</a></h2>
+        <h2><a href="/lab6">Шестая лабораторная</a></h2>
+        <h2><a href="/lab7">Седьмая лабораторная</a></h2>
+        <h2><a href="/lab8">Восьмая лабораторная</a></h2>
+        <h2><a href="/lab9">Девятая лабораторная</a></h2>
+
+        <footer>
+            &copy; Орлов Андрей, ФБИ-21, 3 курс, 2023
+        </footer>
+    </body>
+</html>'''
