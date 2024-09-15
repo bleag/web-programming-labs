@@ -1,5 +1,16 @@
-from flask import Flask, url_for, redirect
+from flask import Flask, url_for, redirect,Response
 app = Flask(__name__)
+
+
+@app.route("/")
+def slesh():
+     return redirect('/lab1/menu', code=302)
+
+
+@app.route("/index")
+def index():
+     return redirect('/lab1/menu', code=302)
+
 
 @app.route("/lab1/web")
 def web():
@@ -134,3 +145,56 @@ def menu():
         </footer>
     </body>
 </html>'''
+
+@app.route('/lab1')
+def lab():
+    return '''
+<!doctype html>
+<html>
+    <head>
+        <title>Орлов Андрей Викторович, Лабораторная 1</title>
+    </head>
+
+    <body>
+        <header>
+            Лабораторная работа 1
+        </header>
+
+        <h1>
+            Flask — фреймворк для создания веб-приложений на языке
+            программирования Python, использующий набор инструментов
+            Werkzeug, а также шаблонизатор Jinja2. Относится к категории так
+            называемых микрофреймворков — минималистичных каркасов
+            веб-приложений, сознательно предоставляющих лишь самые базовые возможности. <br>        
+            
+            <a href="/">Меню</a>
+        </h1>
+    </body>
+    
+</html>
+'''
+
+
+@app.route('/400')
+def error_400():
+    return Response('Неверный запрос', status=400)
+
+@app.route('/401')
+def error_401():
+    return Response('Неавторизованный доступ', status=401)
+
+@app.route('/402')
+def error_402():
+    return Response('Необходима оплата', status=402)
+
+@app.route('/403')
+def error_403():
+    return Response('Доступ запрещён', status=403)
+
+@app.route('/405')
+def error_405():
+    return Response('Метод не разрешён', status=405)
+
+@app.route('/418')
+def error_418():
+    return Response('Я чайник', status=418)
