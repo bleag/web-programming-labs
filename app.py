@@ -198,3 +198,13 @@ def error_405():
 @app.route('/418')
 def error_418():
     return Response('Я чайник', status=418)
+
+
+@app.route('/error')
+def trigger_error():
+    result = 1 / 0
+    return str(result)
+
+@app.errorhandler(500)
+def internal_server_error(err):
+    return render_template('500.html'), 500
