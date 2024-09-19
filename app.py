@@ -1,4 +1,4 @@
-from flask import Flask, url_for, redirect,Response , render_template
+from flask import Flask, url_for, redirect, render_template, Response, render_template_string
 app = Flask(__name__)
 
 
@@ -18,7 +18,7 @@ def web():
         <html> 
                 <body> 
                         <h1>web-сервер на flask</h1> 
-                        <a href="/author">author</a>
+                        <a href="/lab1/author">author</a>
                 </body> 
           </html>"""
 
@@ -36,7 +36,7 @@ def author():
                 <p>Студент: """ + name + """ </p>
                 <p>Группа: """ + group + """ </p>
                 <p>Факультет: """ + faculty + """ </p>
-                <a href= "/web">web</a>
+                <a href= "/lab1/web">web</a>
             </body>
         </html>"""
 
@@ -86,7 +86,7 @@ def reset_counter():
 
 @app.route("/lab1/info")
 def info():
-    return redirect("/author")
+    return redirect("/lab1/author")
 
 @app.route("/lab1/created")
 def created():
@@ -141,7 +141,7 @@ def menu():
         <h2><a href="/lab9">Девятая лабораторная</a></h2>
 
         <footer>
-            &copy; Орлов Андрей, ФБИ-21, 3 курс, 2023
+            &copy; Орлов Андрей, ФБИ-21, 3 курс, 2024
         </footer>
     </body>
 </html>'''
@@ -153,6 +153,30 @@ def lab():
 <html>
     <head>
         <title>Орлов Андрей Викторович, Лабораторная 1</title>
+        <style>
+            body {
+                font-family: 'Arial', sans-serif;
+                background-color: #f9f9f9;
+                color: #333;
+                line-height: 1.6;
+                margin: 20px;
+                font-size: 15px;
+            }
+            h1 {
+                text-align: center;
+                color: blue;
+                margin-bottom: 10px;
+            
+            }
+            p {
+                padding: 10px 20px;
+                border-left: 3px solid #c65d3b;
+                background: #fff;
+                margin: 20px 0;
+                border-radius: 5px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+        </style>
     </head>
 
     <body>
@@ -169,8 +193,32 @@ def lab():
             
             <a href="/">Меню</a>
         </h1>
+        <h2>Реализованные роуты</h2>
+
+        <ul>
+        <div>
+            <li><a href="/lab1/oak">Дуб</a></li>
+            <li><a href="/lab1/web">веб-сервер на фласк</a></li>
+            <li><a href="/lab1/author">студент-группа - факультет</a></li>
+            <li><a href="/lab1/counter">Счетчик</a></li>
+            <li><a href="/lab1/created">201 код</a></li>
+            <li><a href="404"> ошибка 404</a></li>
+            <li><a href="400">Ошибка 400</a></li>
+            <li><a href="401">Ошибка 401</a></li>
+            <li><a href="402">Ошибка 402</a></li>
+            <li><a href="403">Ошибка 403</a></li>
+            <li><a href="405">Ошибка 405</a></li>
+            <li><a href="418">Ошибка 418</a></li>
+            <li><a href="/about"> заголовки</a></li>
+            <li><a href ="/error">ошибка 500</a></li>
+        </div>
+        </ul>
     </body>
-    
+
+        <footer>
+            &copy; Орлов Андрей, ФБИ-, 3 курс, 2024
+        </footer>
+    </body> 
 </html>
 '''
 
@@ -208,3 +256,64 @@ def trigger_error():
 @app.errorhandler(500)
 def internal_server_error(err):
     return render_template('500.html'), 500
+
+@app.route('/about')
+def about():
+    path = url_for("static", filename="river.jpg")
+    html_content = '''
+    <!doctype html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Осень</title>
+         <style>
+            body {
+                font-family: 'Arial', sans-serif;
+                background-color: #f9f9f9;
+                color: #333;
+                line-height: 1.6;
+                margin: 20px;
+            }
+            h1 {
+                text-align: center;
+                color: #c65d3b;
+                font-size: 2.5em;
+                margin-bottom: 20px;
+            }
+            p {
+                padding: 10px 20px;
+                border-left: 3px solid #c65d3b;
+                background: #fff;
+                margin: 20px 0;
+                border-radius: 5px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+        </style>
+    </head>
+    
+    <body>
+            <h1>Река</h1>
+            <p>
+               В далекой уютной деревне, среди заливных полей и высоких холмов, тянется одна из красивейших рек. 
+               Ее прозрачная вода и благоухающие берега притягивают к себе множество путешественников и любителей природы. Здесь, где время замирает, 
+               каждый камень и каждое дерево имеют свою историю, свою тайну, которые манят гостей раскрывать незабываемые загадки природы.
+            </p>
+           <p>
+                В этих краях ты находишься в полном единении с природой. Шум воды, пение птиц и шелест листвы наполняют сердце и дарят умиротворение. Здесь можно встретить оленей и зайцев, которые бесстрашно прогуливаются 
+                по полям и лесам. Каждый шаг вдоль реки открывает все новые и новые красоты, заставляя погрузиться в завораживающую симфонию природы.
+            </p>
+            <p>
+                В моменты, когда солнце падает за горизонт, а небосвод окрашивается в огненные оттенки, река приобретает особую магию. 
+                Ее рассветы и закаты — подарок для каждого, кто позволяет себе остановиться и насладиться этой красотой. 
+                Здесь, среди деревьев и воды, ты найдешь покой и вдохновение, открывая новые грани своего внутреннего мира.
+            </p>
+            <img src="''' + path + '''">
+    </body>
+    </html>'''
+   
+    response = Response(render_template_string(html_content))
+    response.headers['Content-Language'] = 'ru'
+    response.headers['Content-Type'] = 'text/html'
+    response.headers['Content-Length'] = response.calculate_content_length()
+   
+    return response
