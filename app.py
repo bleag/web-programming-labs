@@ -316,11 +316,29 @@ def a():
 def a1():
     return 'со слешем'
 
-flower_List = ('роза', 'тюльпан', 'незабудка' , 'ромашка')
+flower_list = ['роза', 'тюльпан', 'незабудка' , 'ромашка']
 
 @app.route('/lab2/flowers/<int:flower_id>')
 def flowers(flower_id):
-    if flower_id >= len(flower_List):
+    if flower_id >= len(flower_list):
         return "такого изящного цветочка нету" , 404
     else:
-        return "прекрасный цветочек:   " + flower_List[flower_id]
+        return "прекрасный цветочек:   " + flower_list[flower_id]
+    
+@app.route('/lab2/add_flower/<name>')
+def add_flower(name):
+    flower_list.append(name)
+    return f'''
+<!doctype html>
+<html>
+    <body>
+    <h1>Добавлен новый цветок</h1>
+    <p>Название нового цветка: {name} </p>
+    <p>Всего цветов: {len(flower_list)}</p>
+    <p>Полный спискок: {flower_list}</p>
+</html>
+'''
+
+@app.route('/lab2/example')
+def example():
+    return render_template('example.html')
