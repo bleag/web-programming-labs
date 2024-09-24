@@ -156,7 +156,7 @@ def lab():
         <style>
             body {
                 font-family: 'Arial', sans-serif;
-                background-color: #f9f9f9;
+                background-color: lightpurple;
                 color: #333;
                 line-height: 1.6;
                 margin: 20px;
@@ -166,16 +166,7 @@ def lab():
                 text-align: center;
                 color: blue;
                 margin-bottom: 10px;
-            
-            }
-            p {
-                padding: 10px 20px;
-                border-left: 3px solid #c65d3b;
-                background: #fff;
-                margin: 20px 0;
-                border-radius: 5px;
-                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            }
+        
         </style>
     </head>
 
@@ -194,9 +185,8 @@ def lab():
             <a href="/">Меню</a>
         </h1>
         <h2>Реализованные роуты</h2>
-
-        <ul>
         <div>
+            <ol>
             <li><a href="/lab1/oak">Дуб</a></li>
             <li><a href="/lab1/web">веб-сервер на фласк</a></li>
             <li><a href="/lab1/author">студент-группа - факультет</a></li>
@@ -211,12 +201,12 @@ def lab():
             <li><a href="418">Ошибка 418</a></li>
             <li><a href="/about"> заголовки</a></li>
             <li><a href ="/error">ошибка 500</a></li>
-        </div>
-        </ul>
+            </ol>
+        <div>
     </body>
 
         <footer>
-            &copy; Орлов Андрей, ФБИ-, 3 курс, 2024
+            &copy; Орлов Андрей, ФБИ-21, 3 курс, 2024
         </footer>
     </body> 
 </html>
@@ -317,3 +307,20 @@ def about():
     response.headers['Content-Length'] = response.calculate_content_length()
    
     return response
+
+@app.route('/lab2/a')
+def a():
+    return 'без слэша'
+
+@app.route('/lab2/a/')
+def a1():
+    return 'со слешем'
+
+flower_List = ('роза', 'тюльпан', 'незабудка' , 'ромашка')
+
+@app.route('/lab2/flowers/<int:flower_id>')
+def flowers(flower_id):
+    if flower_id >= len(flower_List):
+        return "такого изящного цветочка нету" , 404
+    else:
+        return "прекрасный цветочек:  " + flower_List[flower_id]
