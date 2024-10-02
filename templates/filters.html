@@ -10,7 +10,7 @@
 <div>Фраза: {{phrase | safe }}</div>
 <div>Фраза: {{phrase | striptags | replace ('сколько', 'много') 
     | replace ('нам', 'тут') | upper}}</div>
-<div>Фраза: {{phrase | striptags | reverse ('сколько' , 'много') 
-    | reverse ('нам', 'тут')}}</div>
+<div>Фраза: {{phrase | striptags | replace ('сколько' , 'много') 
+    | reverse}}</div>
 
 {% endblock %}
