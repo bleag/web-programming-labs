@@ -4,7 +4,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def slesh():
-     return redirect('/lab1/menu', code=302)
+     return redirect('/menu', code=302)
 
 
 @app.route("/index")
@@ -381,7 +381,7 @@ def example():
 def lab2():
     return render_template('lab2.html')
 
-@app.route('/lab2/filters')
+@app.route('/lab2/filters/')
 def filters():
     phrase = '0 <b>сколько</b> <u>нам</u> <i>открытий</i> чудных... '
     return render_template('filters.html', phrase = phrase)
@@ -454,7 +454,7 @@ books = [
     {"title": "Мозг и душа", "author": "Валерий Суворов", "genre": "Нейропсихология", "pages": 256}
 ]
 # Обработчик для отображения списка книг
-@app.route('/lab2/books')
+@app.route('/lab2/books/')
 def book_list():
     return render_template('books.html', books=books)
 
@@ -468,7 +468,7 @@ berries = [
     {"name": "Морошка", "description": "Ягода с кисловатым вкусом", "image": "/static/mo.webp"}
 ]
 
-@app.route('/lab2/berries')
+@app.route('/lab2/berries/')
 def show_berries():
     return render_template('berries.html', berries=berries)
 
