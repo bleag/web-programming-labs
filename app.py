@@ -116,7 +116,7 @@ def web1():
             'Content-Type': 'text/plain; charset=utf-8'
         }
 
-@app.route("/lab1/menu")
+@app.route("/menu")
 def menu():
     css_path = url_for("static", filename="lab1.css")
     return '''
@@ -426,35 +426,18 @@ def clear_flowers():
     '''
 
 @app.route('/lab2/calc/<int:a>/<int:b>')
-def calc(a, b):
-    sum_result = a + b
-    sub_result = a - b
-    mul_result = a * b
-    div_result = a / b if b != 0 else 'Деление на ноль'
-    pow_result = a ** b
-    
-    return f'''
-    <!doctype html>
-    <html>
-        <body>
-            <h1>Расчёт с параметрами:</h1>
-            <p>{a} + {b} = {sum_result}</p>
-            <p>{a} - {b} = {sub_result}</p>
-            <p>{a} * {b} = {mul_result}</p>
-            <p>{a} / {b} = {div_result}</p>
-            <p>{a}<sup>{b}</sup> = {pow_result}</p>
-        </body>
-    </html>
-    '''
-# Пересылка с /lab2/calc/ на /lab2/calc/1/1
-@app.route('/lab2/calc/')
-def calc_default():
-    return redirect(url_for('calc', a=1, b=1))
+def calc(a,b):
+    first = a
+    second = b
+    return render_template('calc.html', first = first, second = second)
 
-# Пересылка с /lab2/calc/<int:a> на /lab2/calc/a/1
+@app.route('/lab2/calc/')
+def redcalc():
+    return redirect("/lab2/calc/1/1")
+
 @app.route('/lab2/calc/<int:a>')
-def calc_with_one(b=None, a=1):
-    return redirect(url_for('calc', a=a, b=1))
+def redcalccc(a):
+    return redirect(f"/lab2/calc/{a}/1")
 
 
 # Список книг с указанием автора, названия, жанра и количества страниц
