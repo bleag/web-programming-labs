@@ -1,14 +1,38 @@
 from flask import Blueprint, url_for, redirect, render_template, Response, render_template_string, Blueprint, request
 lab2 = Blueprint('lab2', __name__)
 
+@lab2.route('/lab2/a')
+def a():
+    return 'без слэша'
+
+@lab2.route('/lab2/a/')
+def a1():
+    return 'со слешем'
+
+@lab2.route('/lab2/example')
+def example():
+    name, number, groupe, course='Орлов Андрей', 2, 'ФБИ-21', '3 курс'
+    fruits = [
+        {'name': 'яблоки', 'price': 100},
+        {'name': 'груши', 'price': 120},
+        {'name': 'апельсины', 'price': 80},
+        {'name': 'мандарины', 'price': 95}, 
+        {'name': 'манго', 'price': 321},
+    ]
+    return render_template('example.html', name=name, number=number, groupe=groupe, course=course, fruits=fruits)
+
+
+
 @lab2.route('/lab2/')
-def lab2():
+def lab():
     return render_template('lab2.html')
 
 @lab2.route('/lab2/filters/')
 def filters():
     phrase = '0 <b>сколько</b> <u>нам</u> <i>открытий</i> чудных... '
     return render_template('filters.html', phrase = phrase)
+
+
 
 @lab2.route('/lab2/calc/<int:a>/<int:b>')
 def calc(a,b):
@@ -77,19 +101,19 @@ def add_flower():
     name = request.args.get('name')
     price = request.args.get('price')
     if name and price:
-        flower_list.lab2end({'name': name, 'price': int(price)})
-    return redirect(url_for('list_flowers'))
+        flower_list.append({'name': name, 'price': int(price)})
+    return redirect(url_for('lab2.list_flowers'))
 
 # Обработчик для удаления цветка
 @lab2.route('/lab2/del_flower/<int:flower_id>')
 def delete_flower(flower_id):
     if 0 <= flower_id < len(flower_list):
         del flower_list[flower_id]
-        return redirect(url_for('list_flowers'))
+        return redirect(url_for('lab2.list_flowers'))
     return  render_template ("404.html"), 404
 
 # Обработчик для очистки всех цветов
 @lab2.route('/lab2/clear_flowers/')
 def clear_flowers():
     flower_list.clear()
-    return redirect(url_for('list_flowers'))
+    return redirect(url_for('lab2.list_flowers'))
