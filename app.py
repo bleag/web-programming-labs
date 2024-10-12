@@ -24,7 +24,7 @@ def not_found(err):
 
 @app.route("/menu")
 def menu():
-    css_path = url_for("static", filename="lab1.css")
+    css_path = url_for("static", filename="lab1/lab1.css")
     return '''
 <!DOCTYPE html>
 <html>
@@ -36,16 +36,17 @@ def menu():
         <header>
             НГТУ, ФБ, WEB-программирование, часть 2. Список лабораторных
         </header>
-        <h2><a href="/lab1">Первая лабораторная</a></h2>
-        <h2><a href="/lab2">Вторая лабораторная</a></h2>
-        <h2><a href="/lab3">Третья лабораторная</a></h2>
-        <h2><a href="/lab4">Четвёртая лабораторная</a></h2>
-        <h2><a href="/lab5">Пятая лабораторная</a></h2>
-        <h2><a href="/lab6">Шестая лабораторная</a></h2>
-        <h2><a href="/lab7">Седьмая лабораторная</a></h2>
-        <h2><a href="/lab8">Восьмая лабораторная</a></h2>
-        <h2><a href="/lab9">Девятая лабораторная</a></h2>
-
+        <ol>
+        <li><a href="/lab1">Первая лабораторная</a></li>
+        <li><a href="/lab2">Вторая лабораторная</a></li>
+        <li><a href="/lab3">Третья лабораторная</a></li>
+        <li><a href="/lab4">Четвёртая лабораторная</a></li>
+        <li><a href="/lab5">Пятая лабораторная</a></li>
+        <li><a href="/lab6">Шестая лабораторная</a></li>
+        <li><a href="/lab7">Седьмая лабораторная</a></li>
+        <li><a href="/lab8">Восьмая лабораторная</a></li>
+        <li><a href="/lab9">Девятая лабораторная</a></li>
+        </ol>
         <footer>
             &copy; Орлов Андрей, ФБИ-21, 3 курс, 2024
         </footer>

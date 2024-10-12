@@ -19,18 +19,18 @@ def example():
         {'name': 'мандарины', 'price': 95}, 
         {'name': 'манго', 'price': 321},
     ]
-    return render_template('example.html', name=name, number=number, groupe=groupe, course=course, fruits=fruits)
+    return render_template('lab2/example.html', name=name, number=number, groupe=groupe, course=course, fruits=fruits)
 
 
 
 @lab2.route('/lab2/')
 def lab():
-    return render_template('lab2.html')
+    return render_template('lab2/lab2.html')
 
 @lab2.route('/lab2/filters/')
 def filters():
     phrase = '0 <b>сколько</b> <u>нам</u> <i>открытий</i> чудных... '
-    return render_template('filters.html', phrase = phrase)
+    return render_template('lab2/filters.html', phrase = phrase)
 
 
 
@@ -38,7 +38,7 @@ def filters():
 def calc(a,b):
     first = a
     second = b
-    return render_template('calc.html', first = first, second = second)
+    return render_template('lab2/calc.html', first = first, second = second)
 
 @lab2.route('/lab2/calc/')
 def redcalc():
@@ -65,21 +65,21 @@ books = [
 # Обработчик для отображения списка книг
 @lab2.route('/lab2/books/')
 def book_list():
-    return render_template('books.html', books=books)
+    return render_template('lab2/books.html', books=books)
 
 
 
 berries = [
-    {"name": "Клубника", "description": "Сладкая и сочная летняя ягода.", "image": "/static/k.webp"},
-    {"name": "Малина", "description": "Ягода с нежным ароматом и вкусом.", "image": "/static/ma.webp"},
-    {"name": "Голубика", "description": "Темная ягода с насыщенным вкусом.", "image": "/static/g.jpg"},
-    {"name": "Ежевика", "description": "Ягода с насыщенным сладким вкусом.", "image": "/static/e.webp"},
-    {"name": "Морошка", "description": "Ягода с кисловатым вкусом", "image": "/static/mo.webp"}
+    {"name": "Клубника", "description": "Сладкая и сочная летняя ягода.", "image": "/static/lab2/k.webp"},
+    {"name": "Малина", "description": "Ягода с нежным ароматом и вкусом.", "image": "/static/lab2/ma.webp"},
+    {"name": "Голубика", "description": "Темная ягода с насыщенным вкусом.", "image": "/static/lab2/g.jpg"},
+    {"name": "Ежевика", "description": "Ягода с насыщенным сладким вкусом.", "image": "/static/lab2/e.webp"},
+    {"name": "Морошка", "description": "Ягода с кисловатым вкусом", "image": "/static/lab2/mo.webp"}
 ]
 
 @lab2.route('/lab2/berries/')
 def show_berries():
-    return render_template('berries.html', berries=berries)
+    return render_template('lab2/berries.html', berries=berries)
 
 flower_list = [
     {'name': 'роза', 'price': 300},
@@ -93,7 +93,7 @@ flower_list = [
 # Обработчик для отображения списка всех цветов
 @lab2.route('/lab2/flowers/')
 def list_flowers():
-    return render_template('flower_list.html', flowers=flower_list)
+    return render_template('lab2/flower_list.html', flowers=flower_list)
 
 # Обработчик для добавления нового цветка
 @lab2.route('/lab2/add_flower/', methods=['GET'])

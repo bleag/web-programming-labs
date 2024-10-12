@@ -1,27 +1,74 @@
+
+* {
+    box-sizing: border-box; 
+    margin: 0;
+    padding: 0;
+}
+
+/* Основные стили страницы */
 body {
-    background-color: cadetblue;  
-    color: #333333;  
-    font-family: Arial, sans-serif;  
-    margin: 100px;
-    padding: 30px;
-    text-align: center;  
-    border: 1px solid;
+    background-color: #f4f4f4; /* Светлый фон */
+    color: #333; /* Цвет текста */
+    line-height: 0,8; 
+    display: flex; 
+    flex-direction: column; 
+    min-height: 100vh; 
 }
 
-
-h2 {
-    color: #228b22; 
-    font-size: 36px;  
-    margin-top: 30px;
+/* Стили для заголовка */
+header {
+    background-color: plum; /* Фон заголовка */
+    color: white; /* Цвет текста в заголовке */
+    padding: 10px; /* Внутренние отступы */
+    text-align: left; /* Выравнивание текста по левому краю */
+    width: 100%; /* Занимает всю ширину */
+    position: relative; /* Позиционирование для размещения элементов */
 }
 
-footer{
-    background-color: cyan;
-    color: brown;
-    font-family: Arial, Helvetica, sans-serif;
-    margin: 0px;
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    left: 0;
+header h1 {
+    display: inline; /* Сохраняем заголовок в строке */
+    font-size: 24px; /* Размер заголовка */
+}
+
+header .right {
+    float: right; /* Выравнивание вправо */
+}
+
+/* Стили для списка */
+ol {
+    list-style-type: none; /* Убираем маркеры */
+    padding: 20px; /* Внутренние отступы для списка */
+}
+
+/* Стили для элементов списка */
+ol li {
+    margin: 15px 0; /* Отступы между элементами списка */
+}
+
+/* Стили для ссылок */
+a {
+    display: block; /* Делает ссылки блочными, чтобы занимали всю ширину */
+    background-color: #e7e7e7; /* Фоновый цвет ссылок */
+    color: #333; /* Цвет текста ссылок */
+    padding: 10px; /* Внутренние отступы */
+    text-decoration: none; /* Убираем подчеркивание */
+    border-radius: 5px; /* Закругленные углы */
+    transition: background-color 0.3s, transform 0.2s; /* Плавный переход */
+}
+
+/* Эффект при наведении на ссылки */
+a:hover {
+    background-color: #d1d1d1; /* Цвет фона при наведении */
+    transform: scale(1.02); /* Увеличение при наведении */
+}
+
+/* Стили для подвала */
+footer {
+    text-align: left; /* Выравнивание текста в подвале */
+    padding: 10px; /* Внутренние отступы */
+    background-color: plum; /* Фоновый цвет подвала */
+    color: white; /* Цвет текста в подвале */
+    position: relative; /* Позиционирование для правильного отображения */
+    width: 100%; /* Занимает всю ширину */
+    margin-top: auto; /* Сдвигает футер вниз, если контент занимает место */
 }

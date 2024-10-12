@@ -32,8 +32,8 @@ def author():
 
 @lab1.route('/lab1/oak')
 def oak():
-    path = url_for("static", filename="oak.jpg")
-    css_path = url_for("static", filename="lab1.css")
+    path = url_for("static", filename="lab1/oak.jpg")
+    css_path = url_for("static", filename="lab1/lab1.css")
     return '''
 <!doctype html>
 <html>
@@ -51,7 +51,7 @@ count = 0
 def counter():
     global count
     count +=1
-    reset_url = url_for('reset_counter')
+    reset_url = url_for('lab1.reset_counter')
     return '''
 <!doctype html>
 <html>
@@ -165,7 +165,7 @@ def lab():
 
 @lab1.route('/lab1/about')
 def about():
-    path = url_for("static", filename="river.jpg")
+    path = url_for("static", filename="lab1/river.jpg")
     html_content = '''
     <!doctype html>
     <html>
