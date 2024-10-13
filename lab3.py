@@ -158,3 +158,48 @@ def ticket():
                            destination=destination,
                            travel_date=travel_date,
                            ticket_price=ticket_price)
+
+# Список автомобилей Toyota с более реальными ценами
+cars = [
+    {"name": "Toyota Corolla", "price": 22000, "color": "White", "year": 2023},
+    {"name": "Toyota Camry", "price": 27000, "color": "Black", "year": 2022},
+    {"name": "Toyota Prius", "price": 25000, "color": "Green", "year": 2022},
+    {"name": "Toyota Supra", "price": 54000, "color": "Red", "year": 2023},
+    {"name": "Toyota Highlander", "price": 45000, "color": "Blue", "year": 2023},
+    {"name": "Toyota Sienna", "price": 36000, "color": "Silver", "year": 2023},
+    {"name": "Toyota RAV4", "price": 30000, "color": "White", "year": 2023},
+    {"name": "Toyota Tacoma", "price": 36000, "color": "Black", "year": 2023},
+    {"name": "Toyota Tundra", "price": 52000, "color": "Blue", "year": 2023},
+    {"name": "Toyota Avalon", "price": 43000, "color": "Green", "year": 2022},
+    {"name": "Toyota Land Cruiser", "price": 85000, "color": "Red", "year": 2021},
+    {"name": "Toyota Venza", "price": 33000, "color": "White", "year": 2023},
+    {"name": "Toyota Yaris", "price": 17000, "color": "Yellow", "year": 2021},
+    {"name": "Toyota Mirai", "price": 58000, "color": "Silver", "year": 2023},
+    {"name": "Toyota 4Runner", "price": 51000, "color": "Green", "year": 2023},
+    {"name": "Toyota C-HR", "price": 26000, "color": "Black", "year": 2022},
+    {"name": "Toyota Sequoia", "price": 67000, "color": "White", "year": 2023},
+    {"name": "Toyota Fortuner", "price": 42000, "color": "Blue", "year": 2022},
+    {"name": "Toyota Hilux", "price": 55000, "color": "Red", "year": 2023},
+    {"name": "Toyota Proace", "price": 32000, "color": "Silver", "year": 2022}
+]
+
+# Главная страница с формой для поиска
+@lab3.route('/lab3/cars')
+def index():
+    return render_template('lab3/cars.html')
+
+# Обработка результатов поиска
+@lab3.route('/lab3/result', methods=['POST'])
+def result():
+    min_price = int(request.form['min_price'])
+    max_price = int(request.form['max_price'])
+
+    if min_price > max_price:
+        return render_template('lab3/result.html', error ="Ошибка: Минимальная цена не может быть выше максимальной")
+    
+    # Фильтрация автомобилей по цене
+    filtered_cars = [car for car in cars if min_price <= car["price"] <= max_price]
+
+    # Передаем отфильтрованные данные в шаблон результатов
+    return render_template('lab3/result.html', cars=filtered_cars, min_price=min_price, max_price=max_price)
+

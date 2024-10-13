@@ -7,8 +7,8 @@
 
 /* Основные стили страницы */
 body {
-    background-color: #f4f4f4; /* Светлый фон */
-    color: #333; /* Цвет текста */
+    background-color: whitesmoke; /* Светлый фон */
+    color: black; /* Цвет текста */
     line-height: 0,8; 
     display: flex; 
     flex-direction: column; 
@@ -30,9 +30,7 @@ header h1 {
     font-size: 24px; /* Размер заголовка */
 }
 
-header .right {
-    float: right; /* Выравнивание вправо */
-}
+
 
 /* Стили для списка */
 ol {
@@ -42,24 +40,23 @@ ol {
 
 /* Стили для элементов списка */
 ol li {
-    margin: 15px 0; /* Отступы между элементами списка */
+    margin: 15px ; 
 }
 
 /* Стили для ссылок */
 a {
     display: block; /* Делает ссылки блочными, чтобы занимали всю ширину */
-    background-color: #e7e7e7; /* Фоновый цвет ссылок */
-    color: #333; /* Цвет текста ссылок */
-    padding: 10px; /* Внутренние отступы */
+    background-color: lightgray; /* Фоновый цвет ссылок */
+    color: black; /* Цвет текста ссылок */
+    padding: 9px; /* Внутренние отступы */
     text-decoration: none; /* Убираем подчеркивание */
     border-radius: 5px; /* Закругленные углы */
     transition: background-color 0.3s, transform 0.2s; /* Плавный переход */
 }
 
-/* Эффект при наведении на ссылки */
 a:hover {
-    background-color: #d1d1d1; /* Цвет фона при наведении */
-    transform: scale(1.02); /* Увеличение при наведении */
+    background-color: peru; 
+    transform: scale(1.02); 
 }
 
 /* Стили для подвала */
