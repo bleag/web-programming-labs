@@ -202,4 +202,3 @@ def result():
 
     # Передаем отфильтрованные данные в шаблон результатов
     return render_template('lab3/result.html', cars=filtered_cars, min_price=min_price, max_price=max_price)
-
