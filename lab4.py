@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, make_response, redirect
+from flask import Blueprint, render_template, request, redirect, session
 lab4 = Blueprint('lab4', __name__)
 
 @lab4.route('/lab4/')
@@ -144,23 +144,34 @@ def tree():
 users = [
     {'login': 'alex', 'password': '123'}, 
     {'login': 'bob', 'password': '555'}, 
-    {'login': 'andrey', 'password': '111'}
+    {'login': 'andrey', 'password': '111'},
     {'login': 'egor', 'password': '999'}
 ]
 
 @lab4.route('/lab4/login',methods =['GET','POST'])
 def login():
     if request.method == 'GET':
-        return render_template ('lab4/login.html', authorized= False)
+        if 'login' in session:
+            authorized = True
+            login = session['login']
+        else:
+            authorized = False
+            login = ''
+        return render_template ('lab4/login.html', authorized= authorized,login=login)
     
     login = request.form.get('login')
     password = request.form.get('password')
 
     for user in users:
         if login == user['login'] and password == user['password']:
-            return render_template ('lab4/login.html', login=login, authorized= True)
+            session['login'] = login
+            return redirect ('/lab4/login')
     
     error = 'Неверный логин и/или пароль'
     return render_template ('lab4/login.html', error=error, authorized = False)
 
 
+@lab4.route('/lab4/logout', methods= ['POST'])
+def logout():
+    session.pop('login', None)
+    return redirect('/lab4/login')
