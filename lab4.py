@@ -216,3 +216,48 @@ def fridge():
                 message = f"Установлена температура: {temperature}°С" + "❄️"
 
     return render_template('lab4/fridge.html', message=message, temperature=temperature)
+
+
+@lab4.route('/lab4/ordergrain/', methods=['GET', 'POST'])
+def order_grain():
+    if request.method == 'POST':
+        grain = request.form.get('grain')
+        weight = request.form.get('weight')
+
+        if not weight:
+            error = 'Ошибка: не введен вес'
+            return render_template('ordergrain.html', error=error)
+
+        weight = float(weight)
+        price_per_ton = {
+            'ячмень': 12345,
+            'овёс': 8522,
+            'пшеница': 8722,
+            'рожь': 14111
+        }
+
+
+        price = price_per_ton[grain] * weight
+
+        if weight > 50:
+            discount = 0.1 * price
+            price -= discount
+            discount_message = 'Применена скидка за большой объем.'
+        else:
+            discount_message = ''
+
+
+        if weight > 500:
+            error = 'Извините, такого объема сейчас нет в наличии.'
+            return render_template('lab4/order_grain.html', error=error)
+
+        if weight <= 0:
+            error = 'Ошибка: введен недопустимый вес'
+            return render_template('lab4/order_grain.html', error=error)
+
+        message = f'Заказ успешно сформирован. Вы заказали {grain}. Вес: {weight} т. Сумма к оплате: {price} руб. {discount_message}'
+
+
+        return render_template('lab4/order_grain.html', message=message)
+
+    return render_template('lab4/order_grain.html')
