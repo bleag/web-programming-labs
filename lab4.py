@@ -261,3 +261,62 @@ def order_grain():
         return render_template('lab4/order_grain.html', message=message)
 
     return render_template('lab4/order_grain.html')
+
+@lab4.route('/lab4/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        login = request.form.get('login', '').strip()
+        password = request.form.get('password', '').strip()
+        name = request.form.get('name', '').strip()
+        gender = request.form.get('gender', '').strip()
+        error = None
+
+        if not login or not password or not name:
+            error = 'Все поля обязательны для заполнения.'
+        elif any(user['login'] == login for user in users):
+            error = 'Логин уже занят.'
+        else:
+            users.append({'login': login, 'password': password, 'name': name, 'gender': gender})
+            return redirect('/lab4/login')
+
+        return render_template('lab4/register.html', error=error)
+
+    return render_template('lab4/register.html')
+
+@lab4.route('/lab4/users')
+def users_list():
+    if 'login' not in session:
+        return redirect('/lab4/login')
+
+    return render_template('lab4/users.html', users=users, login=session['login'])
+
+@lab4.route('/lab4/delete', methods=['POST'])
+def delete_user():
+    if 'login' not in session:
+        return redirect('/lab4/login')
+
+    # Удаляем текущего пользователя из списка
+    global users
+    users = [user for user in users if user['login'] != session['login']]
+    session.clear()  # Завершаем сессию после удаления
+    return redirect('/lab4/login')
+
+@lab4.route('/lab4/edit', methods=['GET', 'POST'])
+def edit_user():
+    if 'login' not in session:
+        return redirect('/lab4/login')
+
+    user = next(user for user in users if user['login'] == session['login'])
+
+    if request.method == 'POST':
+        new_name = request.form.get('name', '').strip()
+        new_password = request.form.get('password', '').strip()
+
+        if new_name:
+            user['name'] = new_name
+        if new_password:
+            user['password'] = new_password
+
+        return redirect('/lab4/users')
+
+    return render_template('lab4/edit.html', user=user)
