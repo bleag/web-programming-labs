@@ -110,6 +110,7 @@ def ticket():
     passenger_name = request.args.get('passenger_name')
     passenger_type = request.args.get('passenger_type')
     berth_type = request.args.get('berth_type')
+    withunderwear= request.args.get('withunderwear')
     luggage = request.args.get('luggage')
     insurance = request.args.get('insurance') 
     passenger_age_str = request.args.get('passenger_age')  
@@ -138,6 +139,9 @@ def ticket():
     if berth_type in ['lower', 'lower_side']:
         ticket_price += 100
 
+    if withunderwear == 'on':
+        ticket_price += 75
+
     # Доплата за багаж
     if luggage == 'on':
         ticket_price += 250
@@ -151,6 +155,7 @@ def ticket():
                            passenger_name=passenger_name,
                            passenger_type=passenger_type,
                            berth_type=berth_type,
+                           withunderwear=withunderwear,
                            luggage=luggage,
                            insurance=insurance,
                            passenger_age=passenger_age,

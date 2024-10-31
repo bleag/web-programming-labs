@@ -24,13 +24,13 @@
     <form>
         <label>Ваше имя:</label>
         <div>
-            <input type="text" placeholder="Как вас зовут?" name="user" value="{{user or ''}}">
+            <input type="text" placeholder="Как вас зовут?" name="user" value="{{user or ''}}" required>
             <span>{{errors.user}}</span>
         </div>
 
         <label>Ваш возвраст:</label>
         <div>
-            <input type="number" name="age" value="{{age or ''}}">
+            <input type="number" name="age" value="{{age or ''}}" required>
             <span>{{errors.age}}</span>
         </div>
 

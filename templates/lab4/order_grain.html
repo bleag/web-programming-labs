@@ -14,7 +14,7 @@
             <option value="рожь">Рожь - 14111 руб/т</option>
         </select>
         <label for="weight">Введите вес (тонны):</label>
-        <input  type="number" id="weight" name="weight">
+        <input  type="number" id="weight" name="weight" required>
         <button type="submit">Оформить заказ</button>
         {% if error %}
         <p class="error-message">{{ error }}</p>

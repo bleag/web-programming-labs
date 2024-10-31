@@ -42,10 +42,6 @@ def div():
         
         # Выполняем деление
         result = x1 / x2
-
-    except ValueError:
-        # Обработка ошибки, если ввод не целое число
-        return render_template('lab4/div.html', x1=x1, x2=x2, result=None, error='Ввод должен быть целыми числами')
     
     except ZeroDivisionError:
         # Обработка деления на ноль
@@ -76,11 +72,7 @@ def sub():
     if x1 == "" or x2 == "":
         return render_template('lab4/sub.html', x1=x1, x2=x2, result=None, error='Оба поля должны быть заполнены')
 
-    try:
-        result = int(x1) - int(x2)
-    except ValueError:
-        return render_template('lab4/sub.html', x1=x1, x2=x2, result=None, error='Ввод должен быть целыми числами')
-
+    result = int(x1) - int(x2)
     return render_template('lab4/sub.html', x1=x1, x2=x2, result=result, error=None)
 
 
@@ -89,12 +81,7 @@ def sub():
 def mul():
     x1 = request.form.get('x1') or '1'  # Пустое поле трактуется как 1
     x2 = request.form.get('x2') or '1'
-
-    try:
-        result = int(x1) * int(x2)
-    except ValueError:
-        return render_template('lab4/mul.html', x1=x1, x2=x2, result=None, error='Ввод должен быть целыми числами')
-
+    result = int(x1) * int(x2)
     return render_template('lab4/mul.html', x1=x1, x2=x2, result=result, error=None)
 
 
@@ -226,7 +213,7 @@ def order_grain():
 
         if not weight:
             error = 'Ошибка: не введен вес'
-            return render_template('ordergrain.html', error=error)
+            return render_template('order_grain.html', error=error)
 
         weight = float(weight)
         price_per_ton = {
@@ -297,7 +284,7 @@ def delete_user():
 
     # Удаляем текущего пользователя из списка
     global users
-    users = [user for user in users if user['login'] != session['login']]
+    users = [user for user in users if user['login'] != session['login']] #проверка на совпадение логина с  текущей сессией
     session.clear()  # Завершаем сессию после удаления
     return redirect('/lab4/login')
 

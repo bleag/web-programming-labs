@@ -24,6 +24,7 @@
         Нижняя боковая
     {% endif %}
     </p>
+    <p><strong>С бельем:</strong> {% if withunderwear == 'on' %}Да{% else %}Нет{% endif %}</p>
     <p><strong>С багажом:</strong> {% if luggage == 'on' %}Да{% else %}Нет{% endif %}</p>
     <p><strong>Со страховкой:</strong> {% if insurance == 'on' %}Да{% else %}Нет{% endif %}</p>
     <p><strong>Возраст:</strong> {{ passenger_age }}</p>
