@@ -3,6 +3,10 @@
 {% block lab %}Лабораторная работа 5{% endblock %}
 {% block main %}
     <h1>База знаний</h1>
+
+    <div>
+        <p>Добро пожаловать, {{login if login else "anonumus"}}!</p>
+    </div>
     
     <!-- Контейнер для ссылок, стилизованных как кнопки -->
     <div class="link-container">
