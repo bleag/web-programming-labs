@@ -13,7 +13,6 @@ def lab():
 
 
 def db_connect():
-    print(current_app.config['DB_TYPE'])
     if current_app.config['DB_TYPE'] == 'postgres':
         conn = psycopg2.connect(
             host='127.0.0.1',
@@ -24,9 +23,7 @@ def db_connect():
         cur = conn.cursor(cursor_factory=RealDictCursor)
     else:
         dir_path = path.dirname(path.realpath(__file__))
-        print('dir_path=' + dir_path)
         db_path= path.join(dir_path, "database.db")
-        print('db_path' + db_path)
         conn= sqlite3.connect(db_path)
         conn.row_factory = sqlite3.Row
         cur= conn.cursor()
