@@ -11,9 +11,13 @@
     <!-- Контейнер для ссылок, стилизованных как кнопки -->
     <div class="link-container">
         <a href="/lab5/login" class="button-link">Вход</a>
-        <a href="/lab5/register" class="button-link">Регистрация</a>
+        <a href="/lab5/register" class="button-link">Регистрация</a><br>
         <a href="/lab5/list" class="button-link">Список статей</a>
-        <a href="/lab5/create" class="button-link">Создать статью</a>
+        <a href="/lab5/create" class="button-link">Создать статью</a><br>
+        <a href="/lab5/users" class="button-link">Все пользователи</a>
+        {% if login %}
+        <a href="/lab5/logout" class="button-link">Выйти</a>
+    {% endif %}
     </div>
 
     <style>

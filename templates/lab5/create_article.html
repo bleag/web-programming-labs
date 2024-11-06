@@ -9,17 +9,20 @@
         <div>
             <label>
                 Название статьи:
-                <input type="text" maxlength="50" name="title">
+                <input type="text" maxlength="50" name="title" required>
             </label>
         </div>
 
         <div>
             <label>
                 Текст статьи:
-                <textarea name="article_text"></textarea>
+                <textarea name="article_text" required></textarea>
             </label>
         </div>
         <div>
+        {% if error %}
+            <div style="color: red;">{{ error }}</div>
+        {% endif %}
         <button type="submit">Готово</button>
         </div>
 
