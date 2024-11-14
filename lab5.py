@@ -89,10 +89,7 @@ def login():
     
 @lab5.route('/lab5/logout')
 def logout():
-    # Удаляем данные о пользователе из сессии
     session.pop('login', None)
-    
-    # Перенаправляем на главную страницу /lab5
     return redirect('/lab5')
 
 @lab5.route('/lab5/create', methods=['GET', 'POST'])
@@ -155,23 +152,18 @@ def delete_article(article_id):
         return redirect('/lab5/login')
 
     conn, cur = db_connect()
-    
-    # Получаем id пользователя для проверки, что он является владельцем статьи
     if current_app.config['DB_TYPE'] == 'postgres':
         cur.execute("SELECT id FROM users WHERE login=%s;", (login,))
     else:
         cur.execute("SELECT id FROM users WHERE login=?;", (login,))
     user_id = cur.fetchone()['id']
 
-    # Удаляем статью, только если она принадлежит пользователю
     if current_app.config['DB_TYPE'] == 'postgres':
         cur.execute("DELETE FROM articles WHERE id=%s AND user_id=%s;", (article_id, user_id))
     else:
         cur.execute("DELETE FROM articles WHERE id=? AND user_id=?;", (article_id, user_id))
     
     db_close(conn, cur)
-
-    # Перенаправляем обратно на список статей
     return redirect('/lab5/list')
     
 
