@@ -33,6 +33,12 @@ function getOfficeList() {
             bookingButton.onclick = function() {booking(office.number)};
             li.appendChild(bookingButton);
 
+        if (office.tenant) {
+            const cancelButton = document.createElement('button');
+            cancelButton.innerText = 'освободить';
+            cancelButton.onclick = function () { cancelBooking(office.number) };
+            li.appendChild(cancelButton);
+        }
             ul.appendChild(li);
         }
     });
@@ -77,6 +83,48 @@ function booking(officeNumber) {
         }
     });
 }
+
+function cancelBooking(officeNumber) {
+    const url = '/lab6/json-rpc-api/';
+    const json = {
+        'jsonrpc': '2.0',
+        'method': 'cancellation',
+        'params': officeNumber, // Передаем номер офиса
+        'id': Math.round(Math.random() * 1000)
+    };
+
+    fetch(url, {
+        method: 'POST',
+        headers: { 'Content-type': 'application/json' },
+        body: JSON.stringify(json)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            switch (data.error.code) {
+                case 1:
+                    alert('Вы не авторизованы, пожалуйста, авторизуйтесь');
+                    break;
+                case 3:
+                    alert('Этот офис не арендован');
+                    break;
+                case 4:
+                    alert('Вы не можете снять чужую аренду');
+                    break;
+                case -32602:
+                    alert('Некорректный номер офиса');
+                    break;
+                default:
+                    alert('Неизвестная ошибка');
+            }
+        } else {
+            alert(data.result); // Успешное сообщение
+            document.getElementById('office-list').innerHTML = '';
+            getOfficeList(); // Перерисовать список
+        }
+    });
+}
+
     document.addEventListener('DOMContentLoaded', function(){
     getOfficeList();
 });
