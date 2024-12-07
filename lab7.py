@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, session,redirect, current_app,abort
+from flask import Blueprint, render_template, request, session,redirect, current_app,abort, make_response,jsonify
 
 lab7 = Blueprint('lab7', __name__)
 
@@ -84,3 +84,14 @@ def get_film(id):
     if id < 0 or id >= len(films):
         abort(404)
     return films [id]
+
+
+@lab7.route('/lab7/rest-api/films/<int:id>', methods=['DELETE'])
+def gel_film(id):
+    if id < 0 or id >= len(films):
+        abort(404)
+    del films[id]
+    return '',204
+
+
+
