@@ -10,6 +10,7 @@ function getOfficeList() {
         'jsonrpc': '2.0',
         'method': 'info',
         'id': Math.round(Math.random()*1000)
+         
 
     };
     fetch(url, {
@@ -23,6 +24,10 @@ function getOfficeList() {
     .then(function(data) {
         const office_list = data.result;
         const ul = document.getElementById('office-list');
+        ul.innerHTML = '';
+        let totalprice = 0;
+
+        
         for (let i=0; i< office_list.length; i++) {
             const office = office_list[i];
             const li = document.createElement('li');
@@ -38,9 +43,17 @@ function getOfficeList() {
             cancelButton.innerText = 'освободить';
             cancelButton.onclick = function () { cancelBooking(office.number) };
             li.appendChild(cancelButton);
-        }
-            ul.appendChild(li);
-        }
+            
+            
+                totalprice += office.price || 0;
+            }
+        ul.appendChild(li);
+    }
+
+    const totalpriceElement = document.getElementById('total-price');
+    totalpriceElement.innerText = `Общая стоимость аренды: ${totalprice} руб. `;
+
+
     });
 }
 
@@ -135,5 +148,7 @@ function cancelBooking(officeNumber) {
 {% block main %}
     <h1>Список кабинетов</h1>
     <ul id="office-list"></ul>
+    <ul id="office-list"></ul>
+    <h3 id="total-price">Общая стоимость аренды: 0 руб.</h3>
 
 {% endblock %}
