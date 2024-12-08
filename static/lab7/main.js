@@ -92,10 +92,19 @@ function sendFilm() {
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(film)
     })
-    .then(function() {
+    .then(function(resp) {
+        if (resp.ok) {
         fillFilmList();
         hideModal();
+        return {};
+        }
+        return resp.json();
+    })
+    .then(function(errors) {
+        if(errors.description)
+            document.getElementById('description-error').innerHTML = errors.description;
     });
+    
 }
 
 function editFilm(id) {
