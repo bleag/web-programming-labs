@@ -11,18 +11,18 @@
         box-shadow: 3px 3px 5px black;
         background: white;
         width: 400px;
-        left:50%;
-        top: -220px;
+        left: 50%;
+        top: 220px;
         margin-left: -200px;
         position: absolute;
         padding: 20px;
-}
+    }
 </style>
 {% endblock %}
 
-
 {% block main %}
     <h1>Список фильмов</h1>
+
     <table>
         <thead>
             <tr>
@@ -33,9 +33,11 @@
         </thead>
         <tbody id="film-list"></tbody>
     </table>
+
     <script>
         fillFilmList();
     </script>
+
     <div>
         <button onclick ="addFilm()">Добавить фильм</button>
     </div>
