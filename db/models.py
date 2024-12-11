@@ -13,5 +13,6 @@ class articles(db.Model):
     title = db.Column(db.String(50), nullable=False)
     article_text = db.Column(db.Text, nullable=False)
     is_favorite = db.Column(db.Boolean)
-    is_public = db.Column(db.Boolean)
+    is_public = db.Column(db.Boolean, nullable=False, default=False)
+    user = db.relationship('users', backref='articles')
     likes = db.Column(db.Integer)
