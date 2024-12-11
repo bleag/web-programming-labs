@@ -153,7 +153,7 @@ def add_film():
     except ValueError:
         return {'film_year': 'Год должен быть числом'}, 400
     
-    # Если оригинальное название пустое, устанавливаем его равным русскому названию
+   
     if data['title'] == '':
         data['title'] = data['title_ru']
     
