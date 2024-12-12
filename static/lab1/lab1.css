@@ -9,6 +9,10 @@
 body {
     background-color: whitesmoke; /* Светлый фон */
     color: black; /* Цвет текста */
+    background-image: url('https://avatars.mds.yandex.net/i?id=cadff22328f8d2ff89ccc8d8f2cd6f0e_l-5236780-images-thumbs&n=13'); /* Ссылка на фоновое изображение */
+    background-size: cover; /* Масштабирование фона по размеру экрана */
+    background-position: center; /* Центрирование фона */
+    background-attachment: fixed; /* Фон остается неподвижным при прокрутке */
     line-height: 0,8; 
     display: flex; 
     flex-direction: column; 

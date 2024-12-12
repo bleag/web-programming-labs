@@ -25,7 +25,8 @@
 <!-- Форма поиска -->
 <form action="/lab8/search" method="get" style="margin-bottom: 20px;">
     <input type="text" name="query" placeholder="Поиск по статьям" required>
-    <button type="submit">Искать</button>
+    <button type="submit" class="button-link reset-button">Искать</button>
+    <a href="/lab8/articles" class="button-link reset-button">Сбросить</a>
 </form>
 
 <!-- Кнопки навигации -->
@@ -60,5 +61,10 @@
 
     .delete-button:hover {
         background-color: red;
+    }
+
+    body {
+        background: url('https://avatars.mds.yandex.net/i?id=cadff22328f8d2ff89ccc8d8f2cd6f0e_l-5236780-images-thumbs&n=13') no-repeat center center fixed; 
+        background-size: cover;
     }
 </style>
