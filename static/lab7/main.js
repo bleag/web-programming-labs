@@ -17,18 +17,18 @@ function fillFilmList() {
             // Используем корректные ключи из JSON ответа
             tdTitleRus.innerText = films[i].title_ru;
             tdTitle.innerHTML = `<i>(${films[i].title})</i>`;
-            tdYear.innerText = films[i].film_year; // Исправлено на film_year
+            tdYear.innerText = films[i].film_year; 
 
             let editButton = document.createElement('button');
             editButton.innerText = 'редактировать';
             editButton.onclick = function() {
-                editFilm(films[i].id); // Исправлено на films[i].id
+                editFilm(films[i].id); 
             };
 
             let delButton = document.createElement('button');
             delButton.innerText = 'удалить';
             delButton.onclick = function() {
-                deleteFilm(films[i].id, films[i].title_ru); // Исправлено на films[i].id
+                deleteFilm(films[i].id, films[i].title_ru); 
             }
 
             tdActions.append(editButton);
@@ -84,7 +84,7 @@ function sendFilm() {
     const film = {
         title: document.getElementById('title').value,
         title_ru: document.getElementById('title-ru').value,
-        film_year: document.getElementById('year').value, // Исправлено на film_year
+        film_year: document.getElementById('year').value, 
         description: document.getElementById('description').value
     }
 
@@ -110,7 +110,7 @@ function sendFilm() {
             document.getElementById('title-error').innerText = errors.title;
         if(errors.title_ru)
             document.getElementById('title-ru-error').innerText = errors.title_ru;
-        if(errors.film_year) // Исправлено на film_year
+        if(errors.film_year)
             document.getElementById('year-error').innerText = errors.film_year;
     });
 
@@ -125,7 +125,7 @@ function editFilm(id) {
         document.getElementById('id').value = film.id;
         document.getElementById('title').value = film.title;
         document.getElementById('title-ru').value = film.title_ru;
-        document.getElementById('year').value = film.film_year; // Исправлено на film_year
+        document.getElementById('year').value = film.film_year;
         document.getElementById('description').value = film.description;
         showModal();
     });

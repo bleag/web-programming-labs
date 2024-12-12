@@ -57,7 +57,7 @@ def articles_list():
 @login_required
 def logout():
     logout_user()
-    session.pop('login', None)  # Удаляем логин из сессии
+    session.pop('login', None) 
     return redirect('/lab8/')
 
 
@@ -70,8 +70,8 @@ def create_article():
     # Получаем данные из формы
     title = request.form.get('title')
     article_text = request.form.get('article_text')
-    is_public = request.form.get('is_public') == 'on'  # Чекбокс
-    is_favorite = request.form.get('is_favorite') == 'on'  # Чекбокс
+    is_public = request.form.get('is_public') == 'on' 
+    is_favorite = request.form.get('is_favorite') == 'on'  
 
     if not title or not article_text:
         return render_template('lab8/create.html', error="Название и текст статьи обязательны.")
@@ -105,8 +105,8 @@ def edit_article(article_id):
     # Получаем данные из формы
     title = request.form.get('title')
     article_text = request.form.get('article_text')
-    is_public = request.form.get('is_public') == 'on'  # Чекбокс
-    is_favorite = request.form.get('is_favorite') == 'on'  # Чекбокс
+    is_public = request.form.get('is_public') == 'on'  
+    is_favorite = request.form.get('is_favorite') == 'on'  
 
     if not title or not article_text:
         return render_template('lab8/edit.html', article=article, error="Название и текст статьи обязательны.")
@@ -145,17 +145,16 @@ def public_articles():
 @lab8.route('/lab8/search', methods=['GET', 'POST'])
 @login_required
 def search_articles():
-    query = request.args.get('query', '').strip()  # Получаем строку поиска из параметров
+    query = request.args.get('query', '').strip()  
     results = []
 
     if query:
-        # Фильтрация по названию среди своих статей и публичных
         results = articles.query.filter(
             or_(
-                articles.title.ilike(f"%{query}%"),  # Поиск по названию
-                articles.article_text.ilike(f"%{query}%")  # Дополнительно, если хотите искать в тексте
+                articles.title.ilike(f"%{query}%"),  
+                articles.article_text.ilike(f"%{query}%")  
             ),
-            articles.user_id == current_user.id  # Свои статьи
+            articles.user_id == current_user.id  
         ).all()
     else:
         # Если нет запроса, выводим все статьи пользователя

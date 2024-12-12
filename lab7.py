@@ -130,21 +130,17 @@ def put_film(id):
 def add_film():
     data = request.get_json()
     
-    # Проверка описания
     if data['description'] == '':
         return {'description': 'Заполните описание'}, 400
     if len(data['description']) > 2000:
         return {'description': 'Описание должно быть не более 2000 символов'}, 400
     
-    # Проверка оригинального названия
     if data['title'] == '' and data['title_ru'] == '':
         return {'title': 'Заполните оригинальное или русское название'}, 400
     
-    # Проверка русского названия
     if data['title_ru'] == '':
         return {'title_ru': 'Заполните русское название'}, 400
     
-    # Проверка года
     try:
         film_year = int(data['film_year'])
         current_year = datetime.datetime.now().year
