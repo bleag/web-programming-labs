@@ -13,6 +13,7 @@ from lab5 import lab5
 from lab6 import lab6
 from lab7 import lab7
 from lab8 import lab8
+from rgz.rqz import rgz
 app = Flask(__name__)
 
 login_manager = LoginManager()
@@ -48,6 +49,7 @@ app.register_blueprint(lab5)
 app.register_blueprint(lab6)
 app.register_blueprint(lab7)
 app.register_blueprint(lab8)
+app.register_blueprint(rgz)
 
 @app.route("/")
 def slesh():
@@ -88,6 +90,7 @@ def menu():
         <li><a href="/lab7">Седьмая лабораторная</a></li>
         <li><a href="/lab8">Восьмая лабораторная</a></li>
         <li><a href="/lab9">Девятая лабораторная</a></li>
+        <li><a href="/rqz">РГЗ</a></li>
         </ol>
         <footer>
             &copy; Орлов Андрей, ФБИ-21, 3 курс, 2024
