@@ -4,8 +4,7 @@ import sqlite3
 import psycopg2
 from psycopg2.extras import RealDictCursor
 import datetime
-
-lab7 = Blueprint('lab7', __name__)
+rgz_orlov = Blueprint('rgz_orlov', __name__)
 
 def db_connect():
     if current_app.config['DB_TYPE'] == 'postgres':
@@ -29,3 +28,8 @@ def db_close(conn, cur):
     conn.commit()
     cur.close()
     conn.close()
+
+
+@rgz_orlov.route('/rgz')
+def main():
+    return render_template('rgz/login.html')
