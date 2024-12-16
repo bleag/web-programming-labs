@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 
-{% block lab %}Лабораторная работа 9{% endblock %}
-
 {% block main %}
+
+
 
 <style>
     /* Общие стили */
@@ -15,7 +15,7 @@
         background-size: cover;
         background-position: center;
         background-attachment: fixed; /* Закрепленный фон */
-        color: #fff;
+        color: green;
         height: 100vh;
         display: flex;
         justify-content: center;
@@ -93,10 +93,9 @@
     }
 
 </style>
-    <h1>Новогоднее поздравление</h1>
-    <form method="POST" action="{{ url_for('lab9.index') }}">
-        <label for="name">Введите ваше имя:</label><br>
-        <input type="text" id="name" name="name" required><br><br>
-        <button type="submit">Далее</button>
-    </form>
+    <h1>Поздравление</h1>
+    <p>{{ message }}</p>
+    <img src="{{ url_for('static', filename='images/' + image) }}" alt="Поздравление" style="max-width: 100%; height: auto;">
+    <br><br>
+    <a href="/lab9">Снова пройти тест</a>
 {% endblock %}

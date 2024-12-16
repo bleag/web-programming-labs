@@ -1,8 +1,7 @@
 {% extends "base.html" %}
 
-{% block lab %}Лабораторная работа 9{% endblock %}
-
 {% block main %}
+
 
 <style>
     /* Общие стили */
@@ -93,10 +92,9 @@
     }
 
 </style>
-    <h1>Новогоднее поздравление</h1>
-    <form method="POST" action="{{ url_for('lab9.index') }}">
-        <label for="name">Введите ваше имя:</label><br>
-        <input type="text" id="name" name="name" required><br><br>
-        <button type="submit">Далее</button>
+    <h1>Что вам больше нравится?</h1>
+    <form method="POST" action="{{ url_for('lab9.preference1', name=name, age=age, gender=gender) }}">
+        <button type="submit" name="preference1" value="something_tasty">Что-то вкусное</button>
+        <button type="submit" name="preference1" value="something_beautiful">Что-то красивое</button>
     </form>
 {% endblock %}
