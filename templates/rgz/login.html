@@ -4,7 +4,135 @@
 
 {% block script %}
 <script src="{{ url_for('static', filename='rgz/rgz.js') }}"></script>
+
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background: url('https://avatars.dzeninfra.ru/get-zen_doc/230233/pub_5aed3cc357906a18134a2ffb_5aed42d88c8be3337340c683/scale_1200') no-repeat center center fixed;
+        background-size: cover;
+        color: #333;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+    
+    h1 {
+        color: #fff;
+        font-size: 2.5rem;
+        text-align: center;
+        margin-bottom: 20px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    
+    div {
+        margin-bottom: 15px;
+    }
+    
+    label {
+        display: block;
+        color: #fff;
+        font-size: 1.2rem;
+        margin-bottom: 5px;
+    }
+    
+    input[type="text"], input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    
+    .eror-message {
+        color: #ff6b6b;
+        font-size: 0.9rem;
+        margin-top: 5px;
+        display: none;
+    }
+    
+    button {
+        background-color: #ff6f61;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        font-size: 1rem;
+        cursor: pointer;
+        margin-right: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s ease;
+    }
+    
+    button:hover {
+        background-color: #ff857a;
+    }
+    
+    button:active {
+        background-color: #e65c50;
+    }
+    
+    button:last-of-type {
+        background-color: #6f9eff;
+    }
+    
+    button:last-of-type:hover {
+        background-color: #87b5ff;
+    }
+    
+    button:last-of-type:active {
+        background-color: #5889d1;
+    }
+    
+    #username, #password {
+        max-width: 300px;
+    }
+    
+    form, div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    main {
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 10px;
+        padding: 20px;
+        width: 90%;
+        max-width: 400px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    main div {
+        width: 100%;
+    }
+    
+
+</style>
+
 {% endblock %}
+{% block main %}
+    <h1>Вход на сайт знакомств</h1>
 
-<h1>Вход</h1>
 
+        <div>
+            <label>
+                Логин <input type="text" id="username" required>
+                <div id="username-error" class="eror-message"></div>
+            </label>
+        </div>
+
+        <div>
+            <label>
+                Пароль: <input type="password"  id="password" required>
+                <div id="password-error" class="eror-message"></div>
+            </label>
+
+        </div>
+
+        <button onclick=login()>Вход</button>
+        <button onclick=registration()>Регистрация</button>
+
+{% endblock %}

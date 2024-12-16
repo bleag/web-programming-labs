@@ -27,6 +27,8 @@ def load_users(login_Id):
 
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'секретно-секретный секрет')
 app.config['DB_TYPE'] = os.getenv('DB_TYPE', 'postgres')
+app.config['UPLOAD_FOLDER'] = path.join('static', 'uploads')
+app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
 
 if app.config['DB_TYPE'] == 'postgres':
     db_name = 'orlov_andrey_orm'
@@ -92,7 +94,7 @@ def menu():
         <li><a href="/lab7">Седьмая лабораторная</a></li>
         <li><a href="/lab8">Восьмая лабораторная</a></li>
         <li><a href="/lab9">Девятая лабораторная</a></li>
-        <li><a href="/rqz">РГЗ</a></li>
+        <li><a href="/rgz">РГЗ</a></li>
         </ol>
         <footer>
             &copy; Орлов Андрей, ФБИ-21, 3 курс, 2024
@@ -134,5 +136,3 @@ def trigger_error():
 @app.errorhandler(500)
 def internal_server_error(err):
     return render_template('500.html'), 500
-
-

@@ -91,6 +91,7 @@
     button:focus {
         outline: none;
     }
+    
 
 </style>
     <h1>Поздравление</h1>
@@ -98,4 +99,7 @@
     <img src="{{ url_for('static', filename='images/' + image) }}" alt="Поздравление" style="max-width: 100%; height: auto;">
     <br><br>
     <a href="/lab9">Снова пройти тест</a>
+    <a href="{{ url_for('lab9.reset') }}">
+        <button type="button">Сбросить данные</button>
+    </a>
 {% endblock %}

@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template,request, redirect, url_for
+from flask import Blueprint, render_template,request, redirect, url_for,session
 
 lab9 = Blueprint('lab9', __name__)
 
@@ -7,6 +7,7 @@ lab9 = Blueprint('lab9', __name__)
 def index():
     if request.method == 'POST':
         name = request.form['name']
+        session['name'] = name  # Сохраняем имя в сессии
         return redirect(url_for('lab9.age', name=name))
     return render_template('lab9/index.html')
 
@@ -16,6 +17,7 @@ def age():
     name = request.args.get('name')
     if request.method == 'POST':
         age = int(request.form['age'])
+        session['age'] = age 
         return redirect(url_for('lab9.gender', name=name, age=age))
     return render_template('lab9/age.html', name=name)
 
@@ -26,6 +28,7 @@ def gender():
     age = request.args.get('age')
     if request.method == 'POST':
         gender = request.form['gender']
+        session['gender'] = gender
         return redirect(url_for('lab9.preference1', name=name, age=age, gender=gender))
     return render_template('lab9/gender.html', name=name, age=age)
 
@@ -37,6 +40,7 @@ def preference1():
     gender = request.args.get('gender')
     if request.method == 'POST':
         preference1 = request.form['preference1']
+        session['preference1'] = preference1
         return redirect(url_for('lab9.preference2', name=name, age=age, gender=gender, preference1=preference1))
     return render_template('lab9/preference1.html', name=name, age=age, gender=gender)
 
@@ -49,6 +53,7 @@ def preference2():
     preference1 = request.args.get('preference1')
     if request.method == 'POST':
         preference2 = request.form['preference2']
+        session['preference2'] = preference2
         return redirect(url_for('lab9.final', name=name, age=age, gender=gender, preference1=preference1, preference2=preference2))
     return render_template('lab9/preference2.html', name=name, age=age, gender=gender, preference1=preference1)
 
@@ -102,3 +107,8 @@ def final():
         return "Ошибка: возраст должен быть числом.", 400
     except Exception as e:
         return f"Произошла ошибка: {str(e)}", 500
+    
+@lab9.route('/lab9/reset')
+def reset():
+    session.clear()  # Очищаем все данные в сессии
+    return redirect(url_for('lab9.index'))  # Перенаправляем на начальную страницу
