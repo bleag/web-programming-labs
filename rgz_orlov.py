@@ -122,7 +122,7 @@ def login_user():
 @rgz_orlov.route('/main')
 def rgz_orlov_main_page():
     if 'user_id' not in session:
-        return redirect('/rgz')  # Если пользователь не авторизован, перенаправляем на страницу логина
+        return redirect('/rgz')  
     
     try:
         user_id = session['user_id']
@@ -157,7 +157,7 @@ def rgz_orlov_main_page():
 
 @rgz_orlov.route('/rgz/rest-api/profiles', methods=['POST'])
 def add_profile():
-    user_id = session.get('user_id')  
+    user_id = session['user_id'] 
 
     # Проверка авторизации пользователя
     if 'user_id' not in session:
