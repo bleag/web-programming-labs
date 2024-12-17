@@ -159,6 +159,11 @@ def rgz_orlov_main_page():
 def add_profile():
     user_id = session.get('user_id')  
 
+    # Проверка авторизации пользователя
+    if 'user_id' not in session:
+        current_app.logger.warning("Попытка добавления профиля без авторизации.")
+        return {'message': 'Не авторизован'}, 403
+
     # Получаем данные из формы
     name = request.form.get('name')
     age = request.form.get('age')
