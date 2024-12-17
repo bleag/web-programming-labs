@@ -157,10 +157,14 @@ def rgz_orlov_main_page():
 
 @rgz_orlov.route('/rgz/rest-api/profiles', methods=['POST'])
 def add_profile():
-    if 'user_id' not in session:
+    user_id = session.get('user_id')  # Используем .get() для безопасного извлечения
+
+    # Проверка авторизации пользователя
+    if not user_id:
+        current_app.logger.warning("Попытка добавления профиля без авторизации.")
         return {'message': 'Не авторизован'}, 403
 
-    user_id = session['user_id']
+    # Получаем данные из формы
     name = request.form.get('name')
     age = request.form.get('age')
     gender = request.form.get('gender')
@@ -172,14 +176,21 @@ def add_profile():
     if not name or not age or not gender or not looking_for:
         return {'message': 'Заполните все обязательные поля'}, 400
 
+    # Обработка фото
     photo_path = None
     if photo:
         filename = secure_filename(f"user_{user_id}_{photo.filename}")
-        save_path = path.join(current_app.config['UPLOAD_FOLDER'], filename)
+        upload_folder = current_app.config['UPLOAD_FOLDER']
+        
+        if not os.path.exists(upload_folder):
+            os.makedirs(upload_folder)  # Создаем папку, если её нет
+        
+        save_path = os.path.join(upload_folder, filename)
         photo.save(save_path)
-        photo_path = path.join('uploads', filename)
+        photo_path = os.path.join('uploads', filename)
 
     try:
+        # Добавление данных в БД
         conn, cur = db_connect()
         if current_app.config['DB_TYPE'] == 'postgres':
             cur.execute(
@@ -197,10 +208,16 @@ def add_profile():
                 """,
                 (user_id, name, age, gender, looking_for, about, photo_path),
             )
+        conn.commit()
         db_close(conn, cur)
-        return {}, 201
+
+        return {'message': 'Профиль успешно добавлен'}, 201
+
     except Exception as e:
+        current_app.logger.error(f"Ошибка при добавлении профиля: {str(e)}")
+        db_close(conn, cur)
         return {'message': str(e)}, 500
+
     
 @rgz_orlov.route('/rgz/rest-api/profiles', methods=['PUT'])
 def update_profile():
