@@ -66,7 +66,7 @@ def add_user():
                 "INSERT INTO users (username, password) VALUES (?, ?)",
                 (data['username'], password_hash)
             )
-            new_user_id = cur.lastrowid  
+            new_user_id = cur.fetchone()  
         
         db_close(conn, cur)
         return {"index": new_user_id}, 201
