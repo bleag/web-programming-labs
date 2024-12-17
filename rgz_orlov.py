@@ -39,34 +39,41 @@ def rgz():
     return render_template('rgz/login.html')
 
 
-
 @rgz_orlov.route('/rgz/rest-api/users/registration', methods=['POST'])
 def add_user():
     data = request.get_json()
   
-    if data['username'] == '':
+    # Проверка на пустые поля
+    if not data.get('username'):
         return {'username': 'Заполните никнэйм'}, 400
-    if data['password'] == '':
+    if not data.get('password'):
         return {'password': 'Заполните пароль'}, 400
+    
     password_hash = generate_password_hash(data['password'])
     try:
         conn, cur = db_connect()
-        if current_app.config['DB_TYPE'] == 'postgres':
-            cur.execute("INSERT INTO users (username, password) VALUES (%s, %s) RETURNING id",
-                        (data['username'], password_hash))
-        else:
-            cur.execute("INSERT INTO users (username, password) VALUES (?, ?)",
-                        (data['username'], password_hash))
-    except Exception as e:
-        return{'exception': str(e)}, 400
 
-    new_user_id = cur.fetchone()[0]
-    if current_app.config['DB_TYPE'] == 'postgres':
-        pass 
-    else:
-        cur.lastrowid
-    db_close(conn, cur)
-    return {"index": new_user_id}, 201
+        if current_app.config['DB_TYPE'] == 'postgres':
+            # Вставка и возврат ID новой записи
+            cur.execute(
+                "INSERT INTO users (username, password) VALUES (%s, %s) RETURNING id",
+                (data['username'], password_hash)
+            )
+            new_user_id = cur.fetchone()['id']
+        else:
+            # Вставка в SQLite
+            cur.execute(
+                "INSERT INTO users (username, password) VALUES (?, ?)",
+                (data['username'], password_hash)
+            )
+            new_user_id = cur.lastrowid  
+        
+        db_close(conn, cur)
+        return {"index": new_user_id}, 201
+
+    except Exception as e:
+        db_close(conn, cur)
+        return {'exception': str(e)}, 400
 
 
 @rgz_orlov.route('/rgz/rest-api/users/login', methods=['POST'])
@@ -74,52 +81,80 @@ def login_user():
     data = request.get_json()
 
     # Проверяем наличие введенных данных
-    if data['username'] == '':
+    if not data.get('username'):
         return {'username': 'Введите никнэйм'}, 400
-    if data['password'] == '':
+    if not data.get('password'):
         return {'password': 'Введите пароль'}, 400
 
     try:
         conn, cur = db_connect()
         if current_app.config['DB_TYPE'] == 'postgres':
             cur.execute("SELECT id, username, password FROM users WHERE username = %s", (data['username'],))
+            user = cur.fetchone()  # Возвращает словарь через RealDictCursor
         else:
             cur.execute("SELECT id, username, password FROM users WHERE username = ?", (data['username'],))
+            user = cur.fetchone()  # Возвращает sqlite3.Row
 
-        user = cur.fetchone()
         if not user:
+            db_close(conn, cur)
             return {'username': 'Пользователь не найден'}, 400
 
+        # Получаем данные пользователя в виде словаря
+        user_id = user['id'] if current_app.config['DB_TYPE'] == 'postgres' else user['id']
+        username = user['username'] if current_app.config['DB_TYPE'] == 'postgres' else user['username']
+        password_hash = user['password'] if current_app.config['DB_TYPE'] == 'postgres' else user['password']
+
         # Проверка пароля
-        if not check_password_hash(user['password'], data['password']):
+        if not check_password_hash(password_hash, data['password']):
+            db_close(conn, cur)
             return {'password': 'Неверный пароль'}, 400
 
         # Успешный вход
-        session['user_id'] = user['id'] 
-        session['username'] = user['username']
+        session['user_id'] = user_id
+        session['username'] = username
         db_close(conn, cur)
         return {}, 200
+
     except Exception as e:
+        db_close(conn, cur)
         return {'exception': str(e)}, 400
     
 @rgz_orlov.route('/main')
 def rgz_orlov_main_page():
     if 'user_id' not in session:
-        return redirect('/rgz') 
-    else:
+        return redirect('/rgz')  # Если пользователь не авторизован, перенаправляем на страницу логина
+    
+    try:
         user_id = session['user_id']
         conn, cur = db_connect()
+
+        # Выполняем запрос к базе данных
         if current_app.config['DB_TYPE'] == 'postgres':
             cur.execute("SELECT * FROM profiles WHERE user_id = %s", (user_id,))
         else:
             cur.execute("SELECT * FROM profiles WHERE user_id = ?", (user_id,))
+        
         profile = cur.fetchone()
+
+        # Закрываем соединение
         db_close(conn, cur)
+
+        # Проверяем, найден ли профиль
         if profile:
-            profile['photo_path'] = str(profile['photo_path']).replace('\\', '/')
+            # Приведение пути к фото в корректный формат
+            photo_path = profile['photo_path'] if current_app.config['DB_TYPE'] == 'postgres' else profile['photo_path']
+            profile = dict(profile)  # Преобразуем sqlite3.Row в словарь для совместимости
+            if photo_path:
+                profile['photo_path'] = str(photo_path).replace('\\', '/')
         else:
-            return render_template ('rgz/main.html')
+            return render_template('rgz/main.html')  # Если профиль не найден, загружаем пустую страницу
+
         return render_template('rgz/main.html', username=session['username'], profile=profile)
+    
+    except Exception as e:
+        # Если возникает ошибка, возвращаем сообщение об ошибке
+        return {'message': str(e)}, 500
+
 @rgz_orlov.route('/rgz/rest-api/profiles', methods=['POST'])
 def add_profile():
     if 'user_id' not in session:
@@ -194,29 +229,45 @@ def update_profile():
 
     try:
         conn, cur = db_connect()
-        if current_app.config['DB_TYPE'] == 'postgres':
-            cur.execute(
-                """
+        
+        # SQL-запрос в зависимости от наличия фото
+        if photo_path:
+            query_postgres = """
                 UPDATE profiles
                 SET name = %s, age = %s, gender = %s, looking_for = %s, about = %s, photo_path = %s, is_hidden = %s
                 WHERE user_id = %s
-                """,
-                (name, age, gender, looking_for, about, photo_path, is_hidden, user_id),
-            )
-        else:
-            cur.execute(
-                """
+            """
+            query_sqlite = """
                 UPDATE profiles
                 SET name = ?, age = ?, gender = ?, looking_for = ?, about = ?, photo_path = ?, is_hidden = ?
                 WHERE user_id = ?
-                """,
-                (name, age, gender, looking_for, about, photo_path, is_hidden, user_id),
-            )
+            """
+            params = (name, age, gender, looking_for, about, photo_path, is_hidden, user_id)
+        else:
+            query_postgres = """
+                UPDATE profiles
+                SET name = %s, age = %s, gender = %s, looking_for = %s, about = %s, is_hidden = %s
+                WHERE user_id = %s
+            """
+            query_sqlite = """
+                UPDATE profiles
+                SET name = ?, age = ?, gender = ?, looking_for = ?, about = ?, is_hidden = ?
+                WHERE user_id = ?
+            """
+            params = (name, age, gender, looking_for, about, is_hidden, user_id)
+
+        # Выполняем SQL-запрос
+        if current_app.config['DB_TYPE'] == 'postgres':
+            cur.execute(query_postgres, params)
+        else:
+            cur.execute(query_sqlite, params)
+
+        # Подтверждаем изменения и закрываем соединение
+        conn.commit()
         db_close(conn, cur)
         return {'message': 'Профиль успешно обновлен'}, 200
     except Exception as e:
         return {'message': str(e)}, 500
-
 
 @rgz_orlov.route('/rgz/rest-api/profiles/delete', methods=['DELETE'])
 def delete_profile():
@@ -232,7 +283,7 @@ def delete_profile():
         else:
             cur.execute("DELETE FROM profiles WHERE user_id = ?", (user_id,))
         db_close(conn, cur)
-
+        conn.commit()
         # Очистка сессии после удаления профиля
         session.clear()
         return {'message': 'Аккаунт успешно удален'}, 200
