@@ -93,7 +93,7 @@ def login_user():
             user = cur.fetchone()  
         else:
             cur.execute("SELECT id, username, password FROM users WHERE username = ?", (data['username'],))
-            user = cur.lastrowid
+            user = cur.fetchone()
 
         if not user:
             db_close(conn, cur)
