@@ -180,7 +180,9 @@ def add_profile():
     if photo:
         filename = secure_filename(f"user_{user_id}_{photo.filename}")
         upload_folder = current_app.config['UPLOAD_FOLDER']
-        
+        if current_app.config['DB_TYPE'] != 'postgres':
+            upload_folder = 'web-programming-labs/' + upload_folder
+
         if not os.path.exists(upload_folder):
             os.makedirs(upload_folder) 
         
