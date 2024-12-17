@@ -158,11 +158,12 @@ def rgz_orlov_main_page():
 @rgz_orlov.route('/rgz/rest-api/profiles', methods=['POST'])
 def add_profile():
     user_id = session['user_id'] 
-
+    return {'message': f'{session}'}, 500
     # Проверка авторизации пользователя
     if 'user_id' not in session:
         current_app.logger.warning("Попытка добавления профиля без авторизации.")
         return {'message': 'Не авторизован'}, 403
+
 
     # Получаем данные из формы
     name = request.form.get('name')
