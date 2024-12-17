@@ -135,6 +135,8 @@ def rgz_orlov_main_page():
         
         profile = cur.fetchone()
 
+        profile_filled = bool(profile)
+
         # Закрываем соединение
         db_close(conn, cur)
 
@@ -148,7 +150,7 @@ def rgz_orlov_main_page():
         else:
             return render_template('rgz/main.html')  # Если профиль не найден, загружаем пустую страницу
 
-        return render_template('rgz/main.html', username=session['username'], profile=profile)
+        return render_template('rgz/main.html', username=session['username'], profile=profile, profile_filled= profile_filled)
     
     except Exception as e:
         # Если возникает ошибка, возвращаем сообщение об ошибке

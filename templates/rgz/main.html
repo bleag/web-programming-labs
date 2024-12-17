@@ -190,7 +190,7 @@
     <h1>Вы успешно вошли, пользователь {{username}}!</h1>
     <p>Но вам пока недоступны функции. Заполните анкету.</p>
     <div class="button-container">
-    <button onclick="openModal()">Заполнить анкету</button>
+    <button {% if profile_filled %}disabled{% endif %} onclick="openModal()">Заполнить анкету</button>
     <button onclick="openEditProfileModal()">Редактировать анкету</button>
     <button onclick="deleteAccount()">Удалить аккаунт</button>
     <button onclick="logout()">Выйти из аккаунта</button>
