@@ -179,6 +179,7 @@ def update_profile():
     looking_for = request.form.get('looking_for')
     about = request.form.get('about', '')
     photo = request.files.get('photo')
+    is_hidden = request.form.get('is_hidden') == 'true'
 
     # Проверка обязательных данных
     if not name or not age or not gender or not looking_for:
@@ -197,25 +198,24 @@ def update_profile():
             cur.execute(
                 """
                 UPDATE profiles
-                SET name = %s, age = %s, gender = %s, looking_for = %s, about = %s, photo_path = %s
+                SET name = %s, age = %s, gender = %s, looking_for = %s, about = %s, photo_path = %s, is_hidden = %s
                 WHERE user_id = %s
                 """,
-                (name, age, gender, looking_for, about, photo_path, user_id),
+                (name, age, gender, looking_for, about, photo_path, is_hidden, user_id),
             )
         else:
             cur.execute(
                 """
                 UPDATE profiles
-                SET name = ?, age = ?, gender = ?, looking_for = ?, about = ?, photo_path = ?
+                SET name = ?, age = ?, gender = ?, looking_for = ?, about = ?, photo_path = ?, is_hidden = ?
                 WHERE user_id = ?
                 """,
-                (name, age, gender, looking_for, about, photo_path, user_id),
+                (name, age, gender, looking_for, about, photo_path, is_hidden, user_id),
             )
         db_close(conn, cur)
         return {'message': 'Профиль успешно обновлен'}, 200
     except Exception as e:
         return {'message': str(e)}, 500
-
 
 
 @rgz_orlov.route('/rgz/rest-api/profiles/delete', methods=['DELETE'])
@@ -245,3 +245,90 @@ def delete_profile():
 def logout():
     session.clear()
     return redirect('/rgz')
+
+
+@rgz_orlov.route('/rgz/rest-api/search', methods=['GET'])
+def search_profiles():
+    if 'user_id' not in session:
+        return {'message': 'Не авторизован'}, 403
+
+    # Получаем параметры поиска из запроса
+    search_name = request.args.get('name', '').strip()
+    search_age = request.args.get('age')
+    offset = int(request.args.get('offset', 0))  # Пагинация: начальное смещение
+    limit = 3  # Количество записей на страницу
+
+    # Получаем информацию о текущем пользователе для фильтрации по полу
+    user_id = session['user_id']
+    try:
+        conn, cur = db_connect()
+
+        # Получаем пол и пол для поиска текущего пользователя
+        if current_app.config['DB_TYPE'] == 'postgres':
+            cur.execute("""
+                SELECT gender, looking_for FROM profiles WHERE user_id = %s
+            """, (user_id,))
+        else:
+            cur.execute("""
+                SELECT gender, looking_for FROM profiles WHERE user_id = ?
+            """, (user_id,))
+        
+        user_profile = cur.fetchone()
+        if not user_profile:
+            db_close(conn, cur)
+            return {'message': 'Профиль пользователя не найден'}, 404
+        
+        user_gender = user_profile['gender']
+        user_looking_for = user_profile['looking_for']
+
+        # Основной SQL-запрос с фильтрами
+        if current_app.config['DB_TYPE'] == 'postgres':
+            query = """
+                SELECT name, age, gender, about, photo_path
+                FROM profiles
+                WHERE is_hidden = FALSE
+                AND gender = %s
+                AND looking_for = %s
+            """
+            params = [user_looking_for, user_gender]
+
+            if search_name:
+                query += " AND name ILIKE %s"
+                params.append(f"%{search_name}%")
+
+            if search_age:
+                query += " AND age = %s"
+                params.append(search_age)
+
+            query += " LIMIT %s OFFSET %s"
+            params.extend([limit, offset])
+
+        else:
+            query = """
+                SELECT name, age, gender, about, photo_path
+                FROM profiles
+                WHERE is_hidden = 0
+                AND gender = ?
+                AND looking_for = ?
+            """
+            params = [user_looking_for, user_gender]
+
+            if search_name:
+                query += " AND name LIKE ?"
+                params.append(f"%{search_name}%")
+
+            if search_age:
+                query += " AND age = ?"
+                params.append(search_age)
+
+            query += " LIMIT ? OFFSET ?"
+            params.extend([limit, offset])
+
+        cur.execute(query, tuple(params))
+        results = cur.fetchall()
+        db_close(conn, cur)
+
+        return jsonify([dict(row) for row in results]), 200
+
+    except Exception as e:
+        return {'message': str(e)}, 500
