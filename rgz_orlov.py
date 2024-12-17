@@ -241,7 +241,14 @@ def update_profile():
     photo_path = None
     if photo:
         filename = secure_filename(f"user_{user_id}_{photo.filename}")
-        save_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+        upload_folder = current_app.config['UPLOAD_FOLDER']
+        if current_app.config['DB_TYPE'] != 'postgres':
+            upload_folder = 'web-programming-labs/' + upload_folder
+
+        if not os.path.exists(upload_folder):
+            os.makedirs(upload_folder) 
+        
+        save_path = os.path.join(upload_folder, filename)
         photo.save(save_path)
         photo_path = os.path.join('uploads', filename)
 
