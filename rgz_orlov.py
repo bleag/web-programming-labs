@@ -21,7 +21,7 @@ def db_connect():
         cur = conn.cursor(cursor_factory=RealDictCursor)
     else:
         dir_path = path.dirname(path.realpath(__file__))
-        db_path = path.join(dir_path, "database1.db")
+        db_path = path.join(dir_path, "database2.db")
         conn = sqlite3.connect(db_path)
         conn.row_factory = sqlite3.Row
         cur = conn.cursor()
@@ -66,7 +66,7 @@ def add_user():
                 "INSERT INTO users (username, password) VALUES (?, ?)",
                 (data['username'], password_hash)
             )
-            new_user_id = cur.lastrowid  
+            new_user_id = cur.lastrowid()  
         
         db_close(conn, cur)
         return {"index": new_user_id}, 201
@@ -93,7 +93,7 @@ def login_user():
             user = cur.fetchone()  
         else:
             cur.execute("SELECT id, username, password FROM users WHERE username = ?", (data['username'],))
-            user = cur.fetchone()
+            user = cur.lastrowid
 
         if not user:
             db_close(conn, cur)
@@ -109,7 +109,6 @@ def login_user():
             db_close(conn, cur)
             return {'password': 'Неверный пароль'}, 400
 
-        # Успешный вход
         session['user_id'] = user_id
         session['username'] = username
         db_close(conn, cur)
@@ -158,7 +157,6 @@ def rgz_orlov_main_page():
 @rgz_orlov.route('/rgz/rest-api/profiles', methods=['POST'])
 def add_profile():
     user_id = session['user_id'] 
-    return {'message': f'{session}'}, 500
     # Проверка авторизации пользователя
     if 'user_id' not in session:
         current_app.logger.warning("Попытка добавления профиля без авторизации.")
