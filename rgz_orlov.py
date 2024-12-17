@@ -60,7 +60,7 @@ def add_user():
     except Exception as e:
         return{'exception': str(e)}, 400
 
-    new_user_id = cur.fetchone()['id'] 
+    new_user_id = cur.fetchone()[0]
     if current_app.config['DB_TYPE'] == 'postgres':
         pass 
     else:
