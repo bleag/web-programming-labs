@@ -90,10 +90,10 @@ def login_user():
         conn, cur = db_connect()
         if current_app.config['DB_TYPE'] == 'postgres':
             cur.execute("SELECT id, username, password FROM users WHERE username = %s", (data['username'],))
-            user = cur.fetchone()  # Возвращает словарь через RealDictCursor
+            user = cur.fetchone()  
         else:
             cur.execute("SELECT id, username, password FROM users WHERE username = ?", (data['username'],))
-            user = cur.fetchone()  # Возвращает sqlite3.Row
+            user = cur.lastrowid
 
         if not user:
             db_close(conn, cur)
@@ -157,7 +157,7 @@ def rgz_orlov_main_page():
 
 @rgz_orlov.route('/rgz/rest-api/profiles', methods=['POST'])
 def add_profile():
-    user_id = session.get('user_id')  # Используем .get() для безопасного извлечения
+    user_id = session.get('user_id')  
 
     # Проверка авторизации пользователя
     if not user_id:
@@ -183,7 +183,7 @@ def add_profile():
         upload_folder = current_app.config['UPLOAD_FOLDER']
         
         if not os.path.exists(upload_folder):
-            os.makedirs(upload_folder)  # Создаем папку, если её нет
+            os.makedirs(upload_folder) 
         
         save_path = os.path.join(upload_folder, filename)
         photo.save(save_path)
@@ -247,7 +247,7 @@ def update_profile():
     try:
         conn, cur = db_connect()
         
-        # SQL-запрос в зависимости от наличия фото
+       
         if photo_path:
             query_postgres = """
                 UPDATE profiles
@@ -273,7 +273,6 @@ def update_profile():
             """
             params = (name, age, gender, looking_for, about, is_hidden, user_id)
 
-        # Выполняем SQL-запрос
         if current_app.config['DB_TYPE'] == 'postgres':
             cur.execute(query_postgres, params)
         else:
@@ -301,7 +300,6 @@ def delete_profile():
             cur.execute("DELETE FROM profiles WHERE user_id = ?", (user_id,))
         db_close(conn, cur)
         conn.commit()
-        # Очистка сессии после удаления профиля
         session.clear()
         return {'message': 'Аккаунт успешно удален'}, 200
     except Exception as e:
@@ -320,18 +318,15 @@ def search_profiles():
     if 'user_id' not in session:
         return {'message': 'Не авторизован'}, 403
 
-    # Получаем параметры поиска из запроса
     search_name = request.args.get('name', '').strip()
     search_age = request.args.get('age')
-    offset = int(request.args.get('offset', 0))  # Пагинация: начальное смещение
-    limit = 3  # Количество записей на страницу
+    offset = int(request.args.get('offset', 0)) 
+    limit = 3  
 
-    # Получаем информацию о текущем пользователе для фильтрации по полу
     user_id = session['user_id']
     try:
         conn, cur = db_connect()
 
-        # Получаем пол и пол для поиска текущего пользователя
         if current_app.config['DB_TYPE'] == 'postgres':
             cur.execute("""
                 SELECT gender, looking_for FROM profiles WHERE user_id = %s
@@ -349,7 +344,6 @@ def search_profiles():
         user_gender = user_profile['gender']
         user_looking_for = user_profile['looking_for']
 
-        # Основной SQL-запрос с фильтрами
         if current_app.config['DB_TYPE'] == 'postgres':
             query = """
                 SELECT name, age, gender, about, photo_path
