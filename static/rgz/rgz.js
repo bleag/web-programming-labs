@@ -94,6 +94,10 @@ function submitProfile() {
     .then((response) => {
         if (response.ok) {
             alert("Анкета успешно заполнена!");
+            const unavailableMessage = document.getElementById("unavailable-message");
+            if (unavailableMessage) {
+                unavailableMessage.style.display = "none"; // Скрываем сообщение
+            }
             closeModal(); // Закрываем модальное окно
             window.location.href = "/main"; // Возвращаемся на главную страницу
         } else {
@@ -106,7 +110,6 @@ function submitProfile() {
         }
     });
 }
-
 
 
 function openEditProfileModal() {
